@@ -21,6 +21,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ProductsModule } from './products/products.module';
 import { join } from 'path';
 import {UploadsModule } from "./uploads/uploads.module"
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -37,4 +38,8 @@ import {UploadsModule } from "./uploads/uploads.module"
     UploadsModule 
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes("*"); //apply to all routes
+  }
+}
