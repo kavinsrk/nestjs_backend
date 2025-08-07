@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { User, UserDocument } from '../users/schemas/user.schema';
+import { MESSAGES} from "../common/constants"
 
 @Injectable()
 export class AuthService {
@@ -22,7 +23,7 @@ export class AuthService {
       });
       return user.save();
     } catch (error) {
-      throw new InternalServerErrorException('Error registering user');
+      throw new InternalServerErrorException(MESSAGES.AUTH.REGISTER);
     }
   }
 
@@ -37,7 +38,7 @@ export class AuthService {
         access_token: this.jwtService.sign(payload),
       };
     } catch (error) {
-      throw new InternalServerErrorException('Error during login');
+      throw new InternalServerErrorException(MESSAGES.AUTH.LOGIN_SUCCESS);
     }
   }
 }

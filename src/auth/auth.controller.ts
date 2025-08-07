@@ -1,5 +1,6 @@
 import { Body, Controller, Post, InternalServerErrorException } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { MESSAGES } from 'src/common/constants';
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +13,7 @@ export class AuthController {
     try {
       return await this.authService.register(dto);
     } catch (error) {
-      throw new InternalServerErrorException('Registration failed');
+      throw new InternalServerErrorException(MESSAGES.AUTH.REGISTER);
     }
   }
 
@@ -21,7 +22,7 @@ export class AuthController {
     try {
       return await this.authService.login(dto);
     } catch (error) {
-      throw new InternalServerErrorException('Login failed');
+      throw new InternalServerErrorException(MESSAGES.AUTH.LOGIN_SUCCESS);
     }
   }
 }

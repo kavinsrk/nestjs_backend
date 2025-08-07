@@ -2,6 +2,7 @@
 import { Controller, Get, Post, Body, InternalServerErrorException } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { Cat } from './schemas/cat.schema';
+import { MESSAGES } from 'src/common/constants';
 
 @Controller('cats')
 export class CatsController {
@@ -13,7 +14,7 @@ export class CatsController {
       return await this.catsService.create(cat);
     }
     catch{
-      throw new InternalServerErrorException("failed to create cat");
+      throw new InternalServerErrorException(MESSAGES.CAT.CREATE_FAIL);
     }
   }
 
@@ -22,7 +23,7 @@ export class CatsController {
     try {
        return await this.catsService.findAll();
     } catch (error) {
-      throw new InternalServerErrorException("failed to fetch cats")
+      throw new InternalServerErrorException(MESSAGES.CAT.FETCH_FAIL)
     }
    
   }

@@ -3,6 +3,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Cat, CatDocument } from './schemas/cat.schema';
+import { MESSAGES } from 'src/common/constants';
 
 @Injectable()
 export class CatsService {
@@ -13,7 +14,7 @@ export class CatsService {
       const newCat = new this.catModel(cat);
       return await newCat.save();
     } catch (error) {
-      throw new InternalServerErrorException('Error during saving');
+      throw new InternalServerErrorException(MESSAGES.CAT.CREATE_FAIL);
     }
 
   }
@@ -23,7 +24,7 @@ export class CatsService {
       return await this.catModel.find().exec();
     }
     catch (error) {
-      throw new InternalServerErrorException('Error finding details');
+      throw new InternalServerErrorException(MESSAGES.CAT.FETCH_FAIL);
     }
   }
 }
