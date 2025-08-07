@@ -1,19 +1,30 @@
 // src/cats/cats.controller.ts
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, InternalServerErrorException } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { Cat } from './schemas/cat.schema';
+import { MESSAGES } from 'src/common/constants';
 
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
   @Post()
-  create(@Body() cat: Cat) {
-    return this.catsService.create(cat);
+  async create(@Body() cat: Cat) {
+    try{
+      return await this.catsService.create(cat);
+    }
+    catch{
+      throw new InternalServerErrorException(MESSAGES.CAT.CREATE_FAIL);
+    }
   }
 
   @Get()
-  findAll() {
-    return this.catsService.findAll();
+  async findAll() {
+    try {
+       return await this.catsService.findAll();
+    } catch (error) {
+      throw new InternalServerErrorException(MESSAGES.CAT.FETCH_FAIL)
+    }
+   
   }
 }
