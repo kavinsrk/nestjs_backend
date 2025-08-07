@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Param, Put, Delete, Body, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, Get, Param, Put, Delete, Body, UploadedFile, UseInterceptors,Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ProductsService } from './products.service';
@@ -9,6 +9,16 @@ import { extname } from 'path';
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
+
+  @Get('filter')
+filterProducts(
+  @Query('name') name: string,
+  @Query('createdAt') createdAt: string,
+  @Query('stock') stock: string,
+) {
+  const parsedStock = stock !== undefined ? parseInt(stock, 10) : undefined;
+  return this.productsService.filterProducts(name, createdAt, parsedStock);
+}
 
   @Post()
   @UseInterceptors(

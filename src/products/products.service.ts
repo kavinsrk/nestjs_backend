@@ -36,4 +36,26 @@ export class ProductsService {
     const result = await this.productModel.findByIdAndDelete(id);
     if (!result) throw new NotFoundException('Product not found');
   }
+
+  async filterProducts(name?: string, createdAt?: string, stock?: number) {
+  const query: any = {};
+
+  if (name) {
+    query.name = { $regex: new RegExp(name, 'i') }; // case-insensitive
+  }
+
+  if (createdAt) {
+    const date = new Date(createdAt);
+    if (!isNaN(date.getTime())) {
+      const nextDay = new Date(date);
+      nextDay.setDate(date.getDate() + 1);
+      query.createdAt = { $gte: date, $lt: nextDay };
+    }
+  }
+
+  if (stock !== undefined) {
+    query.stock = stock;
+  }
+
+  return this.productModel.find(query).exec();
 }
